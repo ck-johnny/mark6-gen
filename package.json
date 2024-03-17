@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@types/node": "^20.8.4",
+    "tsc": "^2.0.4"
+  },
+  "scripts": {
+    "g": "ts-node gen.ts"
+  }
+}
