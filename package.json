@@ -6,6 +6,6 @@
     "typescript": "^5.4.2"
   },
   "scripts": {
-    "g": "ts-node gen.ts"
+    "g": "bun gen.ts"
   }
 }

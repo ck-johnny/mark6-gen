@@ -1,12 +1,16 @@
-const num = +process.argv[2] || 1;
+const numOfSet = +process.argv[2] || 1;
+const sizeOfSet = numOfSet === 1 ? 7 : 6;
 
 const gen = () => {
-  for (let i = 0; i < num; i++) {
+  console.log("====" + new Date().toLocaleString());
+  for (let i = 0; i < numOfSet; i++) {
     const newSet = new Set<number>();
-    while (newSet.size < 6) newSet.add(Math.floor(Math.random() * 49) + 1);
+    while (newSet.size < sizeOfSet)
+      newSet.add(Math.floor(Math.random() * 49) + 1);
     const sortedArray = Array.from(newSet).sort((a, b) => a - b);
-    console.log(sortedArray);
+    console.log(i + 1 + ": " + sortedArray);
   }
+  console.log("====" + new Date().toLocaleString());
 };
 
 gen();
