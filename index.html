@@ -124,12 +124,6 @@
         padding: 18px;
       }
 
-      .timestamp {
-        margin: 0 0 16px;
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-
       .sets {
         display: grid;
         gap: 12px;
@@ -239,8 +233,6 @@
       const countInput = document.querySelector("#set-count");
       const output = document.querySelector("#output");
 
-      const formatDate = (date) => date.toLocaleString();
-
       const generateSet = (sizeOfSet) => {
         const newSet = new Set();
 
@@ -251,7 +243,7 @@
         return Array.from(newSet).sort((a, b) => a - b);
       };
 
-      const render = (sets, startedAt, endedAt) => {
+      const render = (sets) => {
         const listItems = sets
           .map((set, index) => {
             const balls = set
@@ -268,9 +260,7 @@
           .join("");
 
         output.innerHTML = `
-          <p class="timestamp">====${formatDate(startedAt)}</p>
           <ol class="sets">${listItems}</ol>
-          <p class="timestamp" style="margin: 16px 0 0;">====${formatDate(endedAt)}</p>
         `;
       };
 
@@ -280,13 +270,12 @@
         const numOfSet = Number(countInput.value) || 1;
         const boundedNumOfSet = Math.min(Math.max(Math.floor(numOfSet), 1), 100);
         const sizeOfSet = boundedNumOfSet === 1 ? 7 : 6;
-        const startedAt = new Date();
         const sets = Array.from({ length: boundedNumOfSet }, () =>
           generateSet(sizeOfSet)
         );
 
         countInput.value = String(boundedNumOfSet);
-        render(sets, startedAt, new Date());
+        render(sets);
       });
     </script>
   </body>
