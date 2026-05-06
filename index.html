@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0f766e">
-    <meta name="description" content="Generate unique sorted Mark Six numbers offline.">
+    <meta name="description" content="Generate unique sorted Mark Six numbers offline, either as one custom draw or multiple 6-number sets.">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon.svg">
@@ -61,12 +61,36 @@
         letter-spacing: 0;
       }
 
+      .version {
+        display: inline-flex;
+        margin-bottom: 16px;
+        padding: 5px 10px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fffdfa;
+        color: var(--muted);
+        font-size: 0.86rem;
+        font-weight: 800;
+      }
+
       .intro p {
         max-width: 32rem;
-        margin: 0;
+        margin: 0 0 16px;
         color: var(--muted);
         font-size: 1.04rem;
         line-height: 1.7;
+      }
+
+      .usage {
+        max-width: 32rem;
+        margin: 0;
+        padding-left: 1.2rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      .usage strong {
+        color: var(--text);
       }
 
       .panel {
@@ -79,13 +103,52 @@
 
       .controls {
         display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 12px;
+        gap: 16px;
         padding: 18px;
         border-bottom: 1px solid var(--line);
       }
 
-      label {
+      .mode-toggle,
+      .preset-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .mode-option,
+      .preset-option {
+        position: relative;
+      }
+
+      .mode-option input,
+      .preset-option input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+      }
+
+      .mode-option span,
+      .preset-option span {
+        display: grid;
+        min-height: 46px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffdfa;
+        color: var(--muted);
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .mode-option input:checked + span,
+      .preset-option input:checked + span {
+        border-color: var(--accent);
+        background: var(--chip);
+        color: #063f3a;
+      }
+
+      label,
+      .field-title {
         display: grid;
         gap: 8px;
         color: var(--muted);
@@ -101,7 +164,7 @@
         font: inherit;
       }
 
-      input {
+      input[type="number"] {
         width: 100%;
         border: 1px solid var(--line);
         padding: 0 13px;
@@ -111,7 +174,6 @@
       }
 
       button {
-        align-self: end;
         border: 0;
         padding: 0 18px;
         background: var(--accent);
@@ -139,9 +201,9 @@
 
       .set {
         display: grid;
-        grid-template-columns: 2.6rem 1fr;
+        grid-template-columns: 2.8rem 1fr;
         gap: 12px;
-        align-items: center;
+        align-items: start;
         padding: 12px;
         border: 1px solid var(--line);
         border-radius: 8px;
@@ -151,11 +213,12 @@
       .set-index {
         color: var(--muted);
         font-weight: 800;
+        line-height: 42px;
       }
 
       .numbers {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(3, 42px);
         gap: 8px;
       }
 
@@ -183,7 +246,8 @@
         }
 
         .shell,
-        .controls {
+        .mode-toggle,
+        .preset-row {
           grid-template-columns: 1fr;
         }
 
@@ -202,32 +266,79 @@
       <div class="shell">
         <section class="intro" aria-labelledby="page-title">
           <h1 id="page-title">Mark Six Generator</h1>
+          <span class="version">Version 1.1.0</span>
           <p>
-            Generate unique sorted Mark Six numbers with the same behavior as
-            the current command-line report.
+            Generate unique sorted Mark Six numbers offline. Switch between one
+            custom draw and multiple 6-number sets.
           </p>
+          <ul class="usage" aria-label="Usage description">
+            <li><strong>Number mode:</strong> generate X non-repeating numbers from 1–49. The count is optional and defaults to 7.</li>
+            <li><strong>Set mode:</strong> generate X sets, each with 6 non-repeating numbers from 1–49. Pick 2, 10, or enter your own count.</li>
+            <li>Results are sorted and displayed three numbers per row.</li>
+          </ul>
         </section>
 
         <section class="panel" aria-label="Generator">
           <form class="controls" id="generator-form">
-            <label for="set-count">
-              Number of sets
+            <div class="field-title">Mode</div>
+            <div class="mode-toggle" role="radiogroup" aria-label="Generation mode">
+              <label class="mode-option">
+                <input type="radio" name="mode" value="numbers" checked>
+                <span>Number mode</span>
+              </label>
+              <label class="mode-option">
+                <input type="radio" name="mode" value="sets">
+                <span>Set mode</span>
+              </label>
+            </div>
+
+            <label id="number-count-field" for="number-count">
+              Numbers to generate
               <input
-                id="set-count"
-                name="set-count"
+                id="number-count"
+                name="number-count"
                 type="number"
                 min="1"
-                max="100"
+                max="49"
                 step="1"
-                value="1"
+                value="7"
+                placeholder="7"
                 inputmode="numeric"
               >
             </label>
+
+            <div id="set-count-field" hidden>
+              <div class="field-title">Sets to generate</div>
+              <div class="preset-row" role="radiogroup" aria-label="Set count presets">
+                <label class="preset-option">
+                  <input type="radio" name="set-preset" value="2" checked>
+                  <span>2 sets</span>
+                </label>
+                <label class="preset-option">
+                  <input type="radio" name="set-preset" value="10">
+                  <span>10 sets</span>
+                </label>
+              </div>
+              <label for="set-count">
+                Custom set count
+                <input
+                  id="set-count"
+                  name="set-count"
+                  type="number"
+                  min="1"
+                  max="100"
+                  step="1"
+                  placeholder="Custom"
+                  inputmode="numeric"
+                >
+              </label>
+            </div>
+
             <button type="submit">Generate</button>
           </form>
 
           <div class="output" id="output" aria-live="polite">
-            <p class="empty">Choose how many sets to generate.</p>
+            <p class="empty">Choose a mode, then generate your numbers.</p>
           </div>
         </section>
       </div>
@@ -235,8 +346,15 @@
 
     <script>
       const form = document.querySelector("#generator-form");
-      const countInput = document.querySelector("#set-count");
+      const numberCountField = document.querySelector("#number-count-field");
+      const setCountField = document.querySelector("#set-count-field");
+      const numberCountInput = document.querySelector("#number-count");
+      const setCountInput = document.querySelector("#set-count");
+      const modeInputs = Array.from(document.querySelectorAll('input[name="mode"]'));
+      const presetInputs = Array.from(document.querySelectorAll('input[name="set-preset"]'));
       const output = document.querySelector("#output");
+
+      const getMode = () => form.elements.mode.value;
 
       const generateSet = (sizeOfSet) => {
         const newSet = new Set();
@@ -246,6 +364,11 @@
         }
 
         return Array.from(newSet).sort((a, b) => a - b);
+      };
+
+      const getBoundedCount = (value, fallback, min, max) => {
+        const parsedValue = Number(value) || fallback;
+        return Math.min(Math.max(Math.floor(parsedValue), min), max);
       };
 
       const render = (sets) => {
@@ -269,25 +392,60 @@
         `;
       };
 
+      const syncModeFields = () => {
+        const isSetMode = getMode() === "sets";
+        numberCountField.hidden = isSetMode;
+        setCountField.hidden = !isSetMode;
+      };
+
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker.register("./service-worker.js");
         });
       }
 
+      modeInputs.forEach((input) => input.addEventListener("change", syncModeFields));
+
+      setCountInput.addEventListener("input", () => {
+        if (setCountInput.value) {
+          presetInputs.forEach((input) => {
+            input.checked = false;
+          });
+        }
+      });
+
+      presetInputs.forEach((input) => {
+        input.addEventListener("change", () => {
+          if (input.checked) {
+            setCountInput.value = "";
+          }
+        });
+      });
+
       form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const numOfSet = Number(countInput.value) || 1;
-        const boundedNumOfSet = Math.min(Math.max(Math.floor(numOfSet), 1), 100);
-        const sizeOfSet = boundedNumOfSet === 1 ? 7 : 6;
-        const sets = Array.from({ length: boundedNumOfSet }, () =>
-          generateSet(sizeOfSet)
-        );
+        if (getMode() === "sets") {
+          const checkedPreset = presetInputs.find((input) => input.checked);
+          const setCount = getBoundedCount(
+            setCountInput.value || checkedPreset?.value,
+            2,
+            1,
+            100
+          );
+          const sets = Array.from({ length: setCount }, () => generateSet(6));
 
-        countInput.value = String(boundedNumOfSet);
-        render(sets);
+          setCountInput.value = setCountInput.value ? String(setCount) : "";
+          render(sets);
+          return;
+        }
+
+        const numberCount = getBoundedCount(numberCountInput.value, 7, 1, 49);
+        numberCountInput.value = String(numberCount);
+        render([generateSet(numberCount)]);
       });
+
+      syncModeFields();
     </script>
   </body>
 </html>
