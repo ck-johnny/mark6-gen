@@ -1,0 +1,18 @@
+{
+  "name": "Mark Six Generator",
+  "short_name": "Mark Six",
+  "description": "Generate unique sorted Mark Six numbers offline.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#0f766e",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

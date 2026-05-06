@@ -10,6 +10,7 @@ node_modules/
 # TypeScript compiler output
 *.js
 *.js.map
+!service-worker.js
 *.d.ts
 
 # System files
@@ -26,3 +27,6 @@ yarn-error.log
 
 # Optional: VSCode directory for workspace settings
 .vscode/
+# Yarn local state
+.yarn/install-state.gz
+.pnp.*
