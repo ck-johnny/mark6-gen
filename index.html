@@ -77,14 +77,6 @@
         font-weight: 800;
       }
 
-      .intro p {
-        max-width: 32rem;
-        margin: 0 0 16px;
-        color: var(--muted);
-        font-size: 1.04rem;
-        line-height: 1.7;
-      }
-
       .learn-more {
         display: inline-flex;
         align-items: center;
@@ -242,8 +234,8 @@
       }
 
       .numbers {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(3, 42px);
         justify-content: center;
         gap: 8px;
       }
@@ -305,11 +297,7 @@
       <div class="shell">
         <section class="intro" aria-labelledby="page-title">
           <h1 id="page-title">Mark Six Generator</h1>
-          <span class="version">Version 1.1.0</span>
-          <p>
-            Generate unique sorted Mark Six numbers offline. Switch between one
-            custom draw and multiple sets that always contain exactly 6 numbers.
-          </p>
+          <span class="version">Version 1.1.1</span>
           <a class="learn-more" href="explanation.html">How it works</a>
         </section>
 
@@ -432,6 +420,7 @@
       const syncModeFields = () => {
         const isSetMode = getMode() === "sets";
         numberCountField.hidden = isSetMode;
+        numberCountInput.disabled = isSetMode;
         setCountField.hidden = !isSetMode;
       };
 
