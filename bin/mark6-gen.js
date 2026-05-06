@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const VERSION = "1.1.0";
+const VERSION = "1.1.1";
 const MIN_NUMBER = 1;
 const MAX_NUMBER = 49;
 const DEFAULT_NUMBER_COUNT = 7;
