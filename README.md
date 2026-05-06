@@ -7,6 +7,7 @@ Installable Mark Six number generator with both a Node.js CLI and a static Progr
 - **Number mode:** generate one sorted set of X unique numbers between `1` and `49`. The count is optional and defaults to `7`.
 - **Set mode:** generate X sorted sets. Each set contains `6` unique numbers between `1` and `49`.
 - Web and CLI output group numbers three per row for easier reading.
+- The web app follows the device color scheme by default, including dark mode when the system requests it.
 
 ## Local use
 
