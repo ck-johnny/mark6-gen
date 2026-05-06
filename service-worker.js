@@ -1,4 +1,4 @@
-const CACHE_NAME = "mark6-gen-v1.1.1";
+const CACHE_NAME = "mark6-gen-v1.1.2";
 const APP_SHELL = [
   "./",
   "./index.html",
