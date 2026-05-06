@@ -1,12 +1,16 @@
 {
+  "name": "mark6-gen",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "yarn@4.12.0",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "g": "bun gen.ts",
+    "typecheck": "tsc --noEmit gen.ts"
+  },
   "devDependencies": {
     "@types/node": "^20.8.4",
     "bun": "^1.3.4",
-    "ts-node": "^10.9.2",
-    "tsc": "^2.0.4",
     "typescript": "^5.4.2"
-  },
-  "scripts": {
-    "g": "bun gen.ts"
   }
 }
