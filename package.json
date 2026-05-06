@@ -17,6 +17,7 @@
   "files": [
     "bin",
     "index.html",
+    "explanation.html",
     "manifest.webmanifest",
     "icons",
     "service-worker.js",
