@@ -9,6 +9,7 @@ node_modules/
 
 # TypeScript compiler output
 *.js
+!bin/mark6-gen.js
 *.js.map
 !service-worker.js
 *.d.ts

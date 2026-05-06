@@ -1,7 +1,7 @@
 {
   "name": "Mark Six Generator",
   "short_name": "Mark Six",
-  "description": "Generate unique sorted Mark Six numbers offline.",
+  "description": "Generate unique sorted Mark Six numbers offline, either as one custom draw or multiple 6-number sets.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

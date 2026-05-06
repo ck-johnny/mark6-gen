@@ -1,14 +1,12 @@
 # mark6-gen
 
-Static Mark Six number generator with Progressive Web App (PWA) support.
+Installable Mark Six number generator with both a Node.js CLI and a static Progressive Web App (PWA).
 
 ## What it does
 
-The browser app keeps the same generation behavior as `gen.ts`:
-
-- `1` set generates `7` unique numbers.
-- More than `1` set generates `6` unique numbers per set.
-- Numbers are unique within each set, between `1` and `49`, and sorted.
+- **Number mode:** generate one sorted set of X unique numbers between `1` and `49`. The count is optional and defaults to `7`.
+- **Set mode:** generate X sorted sets. Each set contains `6` unique numbers between `1` and `49`.
+- Web and CLI output group numbers three per row for easier reading.
 
 ## Local use
 
@@ -30,17 +28,45 @@ Then visit `http://localhost:8000`.
 
 ## Command-line generator
 
-Run the original CLI generator with Bun:
+Run the CLI from this checkout:
 
 ```sh
-yarn g 3
+yarn g
 ```
 
-The optional number is how many sets to generate.
+CLI examples:
+
+```sh
+# Generate 7 numbers, the default number mode count.
+yarn g
+
+# Generate one set with 12 unique numbers.
+yarn g numbers 12
+
+# Generate 10 sets with 6 unique numbers in each set.
+yarn g sets 10
+```
+
+## Installable npm CLI
+
+This package exposes a `mark6-gen` binary and is ready to publish to npm later.
+After publishing, users will be able to run it with:
+
+```sh
+npx mark6-gen
+npx mark6-gen sets 10
+```
+
+For a local install test before publishing:
+
+```sh
+npm link
+mark6-gen --help
+```
 
 ## Checks
 
-Run the TypeScript check for the CLI script:
+Run the TypeScript check for the TypeScript generator script:
 
 ```sh
 yarn typecheck
@@ -48,7 +74,7 @@ yarn typecheck
 
 ## PWA files
 
-- `manifest.webmanifest` defines install metadata, colors, and app icons.
+- `manifest.webmanifest` defines install metadata, colors, description, and app icons.
 - `service-worker.js` caches the app shell for offline use.
 - `icons/icon.svg` is the installable app icon.
 
