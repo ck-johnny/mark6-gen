@@ -1,5 +1,11 @@
 const CACHE_NAME = "mark6-gen-v1.1.0";
-const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon.svg"];
+const APP_SHELL = [
+  "./",
+  "./index.html",
+  "./explanation.html",
+  "./manifest.webmanifest",
+  "./icons/icon.svg",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

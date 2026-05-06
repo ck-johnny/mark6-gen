@@ -21,6 +21,10 @@
         --accent-dark: #115e59;
         --chip: #eef7f6;
         --shadow: 0 18px 50px rgba(32, 33, 36, 0.12);
+        --set-bg-1: #fffdfa;
+        --set-bg-2: #eef7f6;
+        --set-bg-3: #fff4e6;
+        --set-bg-4: #f1f5ff;
       }
 
       * {
@@ -81,16 +85,23 @@
         line-height: 1.7;
       }
 
-      .usage {
-        max-width: 32rem;
-        margin: 0;
-        padding-left: 1.2rem;
-        color: var(--muted);
-        line-height: 1.7;
+      .learn-more {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffdfa;
+        color: var(--accent-dark);
+        font-weight: 800;
+        text-decoration: none;
       }
 
-      .usage strong {
-        color: var(--text);
+      .learn-more:hover {
+        border-color: var(--accent);
+        background: var(--chip);
       }
 
       .panel {
@@ -110,9 +121,9 @@
 
       .mode-toggle,
       .preset-row {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
       }
 
       .mode-option,
@@ -130,7 +141,7 @@
       .mode-option span,
       .preset-option span {
         display: grid;
-        min-height: 46px;
+        min-height: 38px;
         place-items: center;
         border: 1px solid var(--line);
         border-radius: 8px;
@@ -138,6 +149,8 @@
         color: var(--muted);
         font-weight: 800;
         cursor: pointer;
+        padding: 0 12px;
+        white-space: nowrap;
       }
 
       .mode-option input:checked + span,
@@ -203,11 +216,23 @@
         display: grid;
         grid-template-columns: 2.8rem 1fr;
         gap: 12px;
-        align-items: start;
+        align-items: center;
         padding: 12px;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: #fffdfa;
+        background: var(--set-bg-1);
+      }
+
+      .set:nth-child(4n + 2) {
+        background: var(--set-bg-2);
+      }
+
+      .set:nth-child(4n + 3) {
+        background: var(--set-bg-3);
+      }
+
+      .set:nth-child(4n + 4) {
+        background: var(--set-bg-4);
       }
 
       .set-index {
@@ -217,8 +242,9 @@
       }
 
       .numbers {
-        display: grid;
-        grid-template-columns: repeat(3, 42px);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 8px;
       }
 
@@ -245,9 +271,7 @@
           padding: 28px 0;
         }
 
-        .shell,
-        .mode-toggle,
-        .preset-row {
+        .shell {
           grid-template-columns: 1fr;
         }
 
@@ -257,6 +281,21 @@
 
         button {
           width: 100%;
+        }
+
+        .mode-toggle,
+        .preset-row {
+          flex-wrap: nowrap;
+        }
+
+        .mode-option,
+        .preset-option {
+          flex: 1 1 0;
+        }
+
+        .mode-option span,
+        .preset-option span {
+          padding: 0 8px;
         }
       }
     </style>
@@ -269,13 +308,9 @@
           <span class="version">Version 1.1.0</span>
           <p>
             Generate unique sorted Mark Six numbers offline. Switch between one
-            custom draw and multiple 6-number sets.
+            custom draw and multiple sets that always contain exactly 6 numbers.
           </p>
-          <ul class="usage" aria-label="Usage description">
-            <li><strong>Number mode:</strong> generate X non-repeating numbers from 1–49. The count is optional and defaults to 7.</li>
-            <li><strong>Set mode:</strong> generate X sets, each with 6 non-repeating numbers from 1–49. Pick 2, 10, or enter your own count.</li>
-            <li>Results are sorted and displayed three numbers per row.</li>
-          </ul>
+          <a class="learn-more" href="explanation.html">How it works</a>
         </section>
 
         <section class="panel" aria-label="Generator">
@@ -353,6 +388,8 @@
       const modeInputs = Array.from(document.querySelectorAll('input[name="mode"]'));
       const presetInputs = Array.from(document.querySelectorAll('input[name="set-preset"]'));
       const output = document.querySelector("#output");
+
+      const setSize = 6;
 
       const getMode = () => form.elements.mode.value;
 
@@ -433,7 +470,7 @@
             1,
             100
           );
-          const sets = Array.from({ length: setCount }, () => generateSet(6));
+          const sets = Array.from({ length: setCount }, () => generateSet(setSize));
 
           setCountInput.value = setCountInput.value ? String(setCount) : "";
           render(sets);
