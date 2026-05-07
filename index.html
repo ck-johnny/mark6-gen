@@ -5,51 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#0f766e" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#14b8a6" media="(prefers-color-scheme: dark)">
-    <meta name="description" content="Generate unique sorted Mark Six numbers offline, either as one custom draw or multiple 6-number sets.">
+    <meta name="description" content="You're not gambling. You're donating. Thanks for your contribution.">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/icon.svg">
     <title>Mark Six Generator</title>
     <style>
       :root {
-        color-scheme: light dark;
+        color-scheme: light;
         --bg: #f7f4ee;
         --panel: #ffffff;
+        --field: #fffdfa;
+        --field-strong: #ffffff;
         --text: #202124;
         --muted: #687078;
         --line: #d9d2c4;
         --accent: #0f766e;
         --accent-dark: #115e59;
+        --accent-soft: #eef7f6;
+        --accent-soft-hover: #d9efed;
         --chip: #eef7f6;
-        --chip-text: #063f3a;
-        --field-bg: #fffdfa;
-        --ball-border: #b9ded9;
         --shadow: 0 18px 50px rgba(32, 33, 36, 0.12);
-        --set-bg-1: #fffdfa;
-        --set-bg-2: #eef7f6;
-        --set-bg-3: #fff4e6;
-        --set-bg-4: #f1f5ff;
       }
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0f172a;
-          --panel: #111827;
-          --text: #f8fafc;
-          --muted: #cbd5e1;
-          --line: #334155;
-          --accent: #14b8a6;
-          --accent-dark: #2dd4bf;
-          --chip: #123733;
-          --chip-text: #ccfbf1;
-          --field-bg: #1e293b;
-          --ball-border: #2dd4bf;
-          --shadow: 0 18px 50px rgba(0, 0, 0, 0.4);
-          --set-bg-1: #172033;
-          --set-bg-2: #123733;
-          --set-bg-3: #342614;
-          --set-bg-4: #182647;
-        }
+      [data-theme="dark"] {
+        color-scheme: dark;
+        --bg: #101412;
+        --panel: #181f1d;
+        --field: #111816;
+        --field-strong: #0d1311;
+        --text: #f0f4f2;
+        --muted: #aab7b2;
+        --line: #33403c;
+        --accent: #44b8a8;
+        --accent-dark: #7bd4c8;
+        --accent-soft: #1d3733;
+        --accent-soft-hover: #274a44;
+        --chip: #1d3733;
+        --shadow: 0 18px 50px rgba(0, 0, 0, 0.34);
       }
 
       * {
@@ -67,15 +60,15 @@
       }
 
       main {
-        width: min(980px, calc(100vw - 32px));
+        width: min(860px, calc(100vw - 20px));
         margin: 0 auto;
-        padding: 48px 0;
+        padding: 24px 0;
       }
 
       .shell {
         display: grid;
-        grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
-        gap: 28px;
+        grid-template-columns: minmax(190px, 0.72fr) minmax(320px, 1.28fr);
+        gap: 18px;
         align-items: start;
       }
 
@@ -83,42 +76,65 @@
         padding: 14px 0;
       }
 
+      .theme-toggle {
+        min-height: 34px;
+        margin-top: 14px;
+        border: 1px solid var(--line);
+        padding: 0 12px;
+        background: var(--field);
+        color: var(--text);
+        font-size: 0.9rem;
+      }
+
+      .theme-toggle:hover {
+        background: var(--accent-soft);
+      }
+
       h1 {
-        margin: 0 0 14px;
-        font-size: clamp(2.2rem, 7vw, 4.9rem);
-        line-height: 0.95;
+        margin: 0 0 10px;
+        font-size: clamp(1.9rem, 5vw, 3.8rem);
+        line-height: 1;
         letter-spacing: 0;
+      }
+
+      .intro p {
+        max-width: 32rem;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.96rem;
+        line-height: 1.55;
       }
 
       .version {
         display: inline-flex;
-        margin-bottom: 16px;
+        margin: 0 0 10px;
         padding: 5px 10px;
         border: 1px solid var(--line);
         border-radius: 999px;
-        background: var(--field-bg);
+        background: var(--field);
         color: var(--muted);
-        font-size: 0.86rem;
+        font-size: 0.78rem;
         font-weight: 800;
       }
 
       .learn-more {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 42px;
-        padding: 0 14px;
+        display: inline-grid;
+        min-height: 34px;
+        margin: 10px 8px 0 0;
+        place-items: center;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: var(--field-bg);
+        padding: 0 12px;
+        background: var(--field);
         color: var(--accent-dark);
+        font-size: 0.9rem;
         font-weight: 800;
         text-decoration: none;
       }
 
       .learn-more:hover {
         border-color: var(--accent);
-        background: var(--chip);
+        background: var(--accent-soft);
       }
 
       .panel {
@@ -131,85 +147,161 @@
 
       .controls {
         display: grid;
-        gap: 16px;
-        padding: 18px;
+        grid-template-columns: minmax(0, 1fr) minmax(8rem, 0.72fr) auto;
+        gap: 10px;
+        padding: 12px;
         border-bottom: 1px solid var(--line);
       }
 
-      .mode-toggle,
-      .preset-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .mode-option,
-      .preset-option {
-        position: relative;
-      }
-
-      .mode-option input,
-      .preset-option input {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-      }
-
-      .mode-option span,
-      .preset-option span {
-        display: grid;
-        min-height: 38px;
-        place-items: center;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--field-bg);
-        color: var(--muted);
-        font-weight: 800;
-        cursor: pointer;
-        padding: 0 12px;
-        white-space: nowrap;
-      }
-
-      .mode-option input:checked + span,
-      .preset-option input:checked + span {
-        border-color: var(--accent);
-        background: var(--chip);
-        color: var(--chip-text);
-      }
-
       label,
-      .field-title {
+      .control-group {
         display: grid;
-        gap: 8px;
+        gap: 6px;
         color: var(--muted);
-        font-size: 0.86rem;
+        font-size: 0.78rem;
         font-weight: 700;
         text-transform: uppercase;
       }
 
+      fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      legend {
+        margin: 0 0 6px;
+        padding: 0;
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .mode-control {
+        grid-column: 1;
+      }
+
+      .controls[data-mode="number"] .number-control {
+        grid-column: 2 / -1;
+      }
+
+      .controls > button {
+        display: none;
+      }
+
+      .mode-options {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--field);
+      }
+
+      .mode-options input {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+
+      .mode-options span {
+        display: grid;
+        min-height: 34px;
+        place-items: center;
+        border-radius: 6px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-transform: none;
+        cursor: pointer;
+      }
+
+      .mode-options input:checked + span {
+        background: var(--accent);
+        color: white;
+      }
+
       input,
       button {
-        min-height: 46px;
+        min-height: 40px;
         border-radius: 8px;
         font: inherit;
       }
 
-      input[type="number"] {
+      input {
         width: 100%;
         border: 1px solid var(--line);
-        padding: 0 13px;
+        padding: 0 10px;
         color: var(--text);
-        background: var(--field-bg);
-        font-size: 1.08rem;
+        background: var(--field);
+        font-size: 1rem;
       }
 
       button {
+        align-self: end;
         border: 0;
-        padding: 0 18px;
+        padding: 0 14px;
         background: var(--accent);
         color: white;
         font-weight: 800;
         cursor: pointer;
+      }
+
+      .stepper {
+        display: grid;
+        grid-template-columns: 40px minmax(42px, 1fr) 40px;
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--field);
+      }
+
+      .stepper button {
+        align-self: auto;
+        width: 40px;
+        min-height: 40px;
+        border-radius: 0;
+        padding: 0;
+        background: var(--accent-soft);
+        color: var(--accent-dark);
+        font-size: 1.25rem;
+        line-height: 1;
+      }
+
+      .stepper button:hover {
+        background: var(--accent-soft-hover);
+      }
+
+      .stepper input {
+        min-height: 40px;
+        border: 0;
+        border-right: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+        border-radius: 0;
+        background: var(--field-strong);
+        padding: 0 6px;
+        text-align: center;
+        font-weight: 850;
+        -moz-appearance: textfield;
+      }
+
+      .stepper input::-webkit-outer-spin-button,
+      .stepper input::-webkit-inner-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+      }
+
+      .number-control[hidden] {
+        display: none;
+      }
+
+      .set-control[hidden] {
+        display: none;
       }
 
       button:hover {
@@ -217,63 +309,130 @@
       }
 
       .output {
-        min-height: 360px;
-        padding: 18px;
+        min-height: 260px;
+        padding: 12px;
       }
 
       .sets {
         display: grid;
-        gap: 12px;
+        gap: 8px;
         margin: 0;
         padding: 0;
         list-style: none;
       }
 
       .set {
+        --row-bg: #fffdfa;
+        --row-ball-bg: #eef7f6;
+        --row-ball-border: #b9ded9;
+        --row-ball-text: #063f3a;
+        --row-index-bg: rgba(15, 118, 110, 0.08);
         display: grid;
-        grid-template-columns: 2.8rem 1fr;
-        gap: 12px;
-        align-items: center;
-        padding: 12px;
+        grid-template-columns: auto 1fr;
+        gap: 8px;
+        align-items: stretch;
+        padding: 8px;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: var(--set-bg-1);
+        background: var(--row-bg);
+      }
+
+      .set:nth-child(4n + 1) {
+        --row-bg: #fffdfa;
+        --row-ball-bg: #eef7f6;
+        --row-ball-border: #b9ded9;
+        --row-ball-text: #063f3a;
+        --row-index-bg: rgba(15, 118, 110, 0.08);
       }
 
       .set:nth-child(4n + 2) {
-        background: var(--set-bg-2);
+        --row-bg: #fff7ed;
+        --row-ball-bg: #fff1df;
+        --row-ball-border: #f0c487;
+        --row-ball-text: #6f3f08;
+        --row-index-bg: rgba(240, 196, 135, 0.2);
       }
 
       .set:nth-child(4n + 3) {
-        background: var(--set-bg-3);
+        --row-bg: #f5f7ff;
+        --row-ball-bg: #edf2ff;
+        --row-ball-border: #bdcaff;
+        --row-ball-text: #243875;
+        --row-index-bg: rgba(189, 202, 255, 0.22);
       }
 
       .set:nth-child(4n + 4) {
-        background: var(--set-bg-4);
+        --row-bg: #f7f3ff;
+        --row-ball-bg: #f0e9ff;
+        --row-ball-border: #ccb9f4;
+        --row-ball-text: #4d2a82;
+        --row-index-bg: rgba(204, 185, 244, 0.22);
+      }
+
+      [data-theme="dark"] .set:nth-child(4n + 1) {
+        --row-bg: #121c1a;
+        --row-ball-bg: #1d3733;
+        --row-ball-border: #367a70;
+        --row-ball-text: #b8f1e8;
+        --row-index-bg: rgba(68, 184, 168, 0.13);
+      }
+
+      [data-theme="dark"] .set:nth-child(4n + 2) {
+        --row-bg: #20180f;
+        --row-ball-bg: #332312;
+        --row-ball-border: #8a5d20;
+        --row-ball-text: #ffdca8;
+        --row-index-bg: rgba(212, 146, 47, 0.16);
+      }
+
+      [data-theme="dark"] .set:nth-child(4n + 3) {
+        --row-bg: #141928;
+        --row-ball-bg: #1c2540;
+        --row-ball-border: #5269a9;
+        --row-ball-text: #dce5ff;
+        --row-index-bg: rgba(107, 132, 204, 0.17);
+      }
+
+      [data-theme="dark"] .set:nth-child(4n + 4) {
+        --row-bg: #1b1726;
+        --row-ball-bg: #2a2140;
+        --row-ball-border: #735da7;
+        --row-ball-text: #eadfff;
+        --row-index-bg: rgba(142, 116, 202, 0.18);
       }
 
       .set-index {
+        display: grid;
+        min-width: 2.4rem;
+        min-height: 4.8rem;
+        place-items: center;
+        padding: 0 0.35rem;
+        border-radius: 6px;
+        background: var(--row-index-bg);
         color: var(--muted);
-        font-weight: 800;
-        line-height: 42px;
+        font-size: 1.8rem;
+        font-weight: 900;
+        line-height: 1;
+        opacity: 0.48;
       }
 
       .numbers {
         display: grid;
-        grid-template-columns: repeat(3, 42px);
-        justify-content: center;
-        gap: 8px;
+        grid-template-columns: repeat(3, 38px);
+        gap: 6px;
+        width: max-content;
+        justify-self: end;
       }
 
       .ball {
         display: inline-grid;
         place-items: center;
-        width: 42px;
+        width: 38px;
         aspect-ratio: 1;
-        border: 1px solid var(--ball-border);
+        border: 1px solid var(--row-ball-border);
         border-radius: 50%;
-        background: var(--chip);
-        color: var(--chip-text);
+        background: var(--row-ball-bg);
+        color: var(--row-ball-text);
         font-weight: 850;
         line-height: 1;
       }
@@ -285,34 +444,72 @@
 
       @media (max-width: 760px) {
         main {
-          padding: 28px 0;
+          width: min(520px, calc(100vw - 16px));
+          padding: 10px 0;
         }
 
         .shell {
           grid-template-columns: 1fr;
+          gap: 10px;
         }
 
         .intro {
           padding: 0;
         }
 
-        button {
+        .theme-toggle {
+          margin-top: 8px;
+        }
+
+        h1 {
+          margin-bottom: 4px;
+          font-size: 1.65rem;
+        }
+
+        .intro p {
+          font-size: 0.86rem;
+          line-height: 1.4;
+        }
+
+        .controls {
+          grid-template-columns: minmax(0, 1fr) minmax(5.4rem, 0.48fr);
+          gap: 8px;
+          padding: 10px;
+        }
+
+        .mode-control {
+          grid-column: auto;
+        }
+
+        .controls[data-mode="number"] .mode-control,
+        .controls[data-mode="number"] .number-control,
+        .controls[data-mode="set"] .mode-control,
+        .controls[data-mode="set"] .set-control {
+          grid-column: 1 / -1;
+        }
+
+        .set-control,
+        .number-control {
+          min-width: 0;
+        }
+
+        .controls > button {
+          grid-column: 1 / -1;
           width: 100%;
+          white-space: nowrap;
         }
 
-        .mode-toggle,
-        .preset-row {
-          flex-wrap: nowrap;
+        .output {
+          min-height: 220px;
+          padding: 10px;
         }
 
-        .mode-option,
-        .preset-option {
-          flex: 1 1 0;
+        .set {
+          gap: 6px;
         }
 
-        .mode-option span,
-        .preset-option span {
-          padding: 0 8px;
+        .ball {
+          width: 36px;
         }
       }
     </style>
@@ -323,70 +520,69 @@
         <section class="intro" aria-labelledby="page-title">
           <h1 id="page-title">Mark Six Generator</h1>
           <span class="version">Version 1.1.1</span>
+          <p>
+            You're not gambling. You're donating. Thanks for your contribution.
+          </p>
           <a class="learn-more" href="explanation.html">How it works</a>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">Dark mode</button>
         </section>
 
         <section class="panel" aria-label="Generator">
           <form class="controls" id="generator-form">
-            <div class="field-title">Mode</div>
-            <div class="mode-toggle" role="radiogroup" aria-label="Generation mode">
-              <label class="mode-option">
-                <input type="radio" name="mode" value="numbers" checked>
-                <span>Number mode</span>
-              </label>
-              <label class="mode-option">
-                <input type="radio" name="mode" value="sets">
-                <span>Set mode</span>
-              </label>
-            </div>
-
-            <label id="number-count-field" for="number-count">
-              Numbers to generate
-              <input
-                id="number-count"
-                name="number-count"
-                type="number"
-                min="1"
-                max="49"
-                step="1"
-                value="7"
-                placeholder="7"
-                inputmode="numeric"
-              >
-            </label>
-
-            <div id="set-count-field" hidden>
-              <div class="field-title">Sets to generate</div>
-              <div class="preset-row" role="radiogroup" aria-label="Set count presets">
-                <label class="preset-option">
-                  <input type="radio" name="set-preset" value="2" checked>
-                  <span>2 sets</span>
+            <fieldset class="mode-control">
+              <legend>Mode</legend>
+              <div class="mode-options">
+                <label>
+                  <input type="radio" name="mode" value="number">
+                  <span>Number</span>
                 </label>
-                <label class="preset-option">
-                  <input type="radio" name="set-preset" value="10">
-                  <span>10 sets</span>
+                <label>
+                  <input type="radio" name="mode" value="set" checked>
+                  <span>Set</span>
                 </label>
               </div>
-              <label for="set-count">
-                Custom set count
+            </fieldset>
+            <div class="control-group number-control">
+              <span id="number-count-label">Numbers to generate</span>
+              <span class="stepper">
+                <button type="button" id="decrease-number" aria-label="Decrease numbers to generate">-</button>
+                <input
+                  id="number-count"
+                  name="number-count"
+                  type="number"
+                  aria-labelledby="number-count-label"
+                  min="1"
+                  max="49"
+                  step="1"
+                  value="7"
+                  inputmode="numeric"
+                >
+                <button type="button" id="increase-number" aria-label="Increase numbers to generate">+</button>
+              </span>
+            </div>
+            <div class="control-group set-control" hidden>
+              <span id="set-count-label">Number of sets</span>
+              <span class="stepper">
+                <button type="button" id="decrease-set" aria-label="Decrease number of sets">-</button>
                 <input
                   id="set-count"
                   name="set-count"
                   type="number"
+                  aria-labelledby="set-count-label"
                   min="1"
                   max="100"
                   step="1"
-                  placeholder="Custom"
+                  value="2"
                   inputmode="numeric"
                 >
-              </label>
+                <button type="button" id="increase-set" aria-label="Increase number of sets">+</button>
+              </span>
             </div>
-
             <button type="submit">Generate</button>
           </form>
 
           <div class="output" id="output" aria-live="polite">
-            <p class="empty">Choose a mode, then generate your numbers.</p>
+            <p class="empty">Choose a mode and generate your numbers.</p>
           </div>
         </section>
       </div>
@@ -394,17 +590,57 @@
 
     <script>
       const form = document.querySelector("#generator-form");
-      const numberCountField = document.querySelector("#number-count-field");
-      const setCountField = document.querySelector("#set-count-field");
-      const numberCountInput = document.querySelector("#number-count");
-      const setCountInput = document.querySelector("#set-count");
-      const modeInputs = Array.from(document.querySelectorAll('input[name="mode"]'));
-      const presetInputs = Array.from(document.querySelectorAll('input[name="set-preset"]'));
+      const countInput = document.querySelector("#set-count");
+      const numberControl = document.querySelector(".number-control");
+      const setControl = document.querySelector(".set-control");
+      const numberInput = document.querySelector("#number-count");
+      const decreaseNumberButton = document.querySelector("#decrease-number");
+      const increaseNumberButton = document.querySelector("#increase-number");
+      const decreaseSetButton = document.querySelector("#decrease-set");
+      const increaseSetButton = document.querySelector("#increase-set");
+      const themeToggle = document.querySelector("#theme-toggle");
       const output = document.querySelector("#output");
+      const storedTheme = localStorage.getItem("mark-six-theme");
+      const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
 
-      const setSize = 6;
+      const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+        themeToggle.setAttribute(
+          "aria-label",
+          theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+        );
+      };
 
-      const getMode = () => form.elements.mode.value;
+      const getMode = () =>
+        document.querySelector('input[name="mode"]:checked').value;
+
+      const clamp = (value, min, max) =>
+        Math.min(Math.max(Math.floor(Number(value) || min), min), max);
+
+      const syncMode = () => {
+        const mode = getMode();
+
+        form.dataset.mode = mode;
+        numberControl.hidden = mode === "set";
+        setControl.hidden = mode === "number";
+      };
+
+      const updateNumberCount = (change) => {
+        numberInput.value = String(clamp(Number(numberInput.value) + change, 1, 49));
+      };
+
+      const updateSetCount = (change) => {
+        countInput.value = String(clamp(Number(countInput.value) + change, 1, 100));
+      };
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("./service-worker.js");
+        });
+      }
 
       const generateSet = (sizeOfSet) => {
         const newSet = new Set();
@@ -416,11 +652,6 @@
         return Array.from(newSet).sort((a, b) => a - b);
       };
 
-      const getBoundedCount = (value, fallback, min, max) => {
-        const parsedValue = Number(value) || fallback;
-        return Math.min(Math.max(Math.floor(parsedValue), min), max);
-      };
-
       const render = (sets) => {
         const listItems = sets
           .map((set, index) => {
@@ -430,7 +661,7 @@
 
             return `
               <li class="set">
-                <span class="set-index">${index + 1}:</span>
+                <span class="set-index">${index + 1}</span>
                 <span class="numbers">${balls}</span>
               </li>
             `;
@@ -442,61 +673,77 @@
         `;
       };
 
-      const syncModeFields = () => {
-        const isSetMode = getMode() === "sets";
-        numberCountField.hidden = isSetMode;
-        numberCountInput.disabled = isSetMode;
-        setCountField.hidden = !isSetMode;
-      };
+      const generate = () => {
+        const mode = getMode();
+        const boundedNumOfSet = clamp(countInput.value, 1, 100);
+        const sizeOfSet = mode === "number" ? clamp(numberInput.value, 1, 49) : 6;
+        const numberOfSets = mode === "number" ? 1 : boundedNumOfSet;
+        const sets = Array.from({ length: numberOfSets }, () =>
+          generateSet(sizeOfSet)
+        );
 
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("./service-worker.js");
-        });
-      }
-
-      modeInputs.forEach((input) => input.addEventListener("change", syncModeFields));
-
-      setCountInput.addEventListener("input", () => {
-        if (setCountInput.value) {
-          presetInputs.forEach((input) => {
-            input.checked = false;
-          });
+        countInput.value = String(boundedNumOfSet);
+        if (mode === "number") {
+          numberInput.value = String(sizeOfSet);
         }
-      });
-
-      presetInputs.forEach((input) => {
-        input.addEventListener("change", () => {
-          if (input.checked) {
-            setCountInput.value = "";
-          }
-        });
-      });
+        render(sets);
+      };
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-
-        if (getMode() === "sets") {
-          const checkedPreset = presetInputs.find((input) => input.checked);
-          const setCount = getBoundedCount(
-            setCountInput.value || checkedPreset?.value,
-            2,
-            1,
-            100
-          );
-          const sets = Array.from({ length: setCount }, () => generateSet(setSize));
-
-          setCountInput.value = setCountInput.value ? String(setCount) : "";
-          render(sets);
-          return;
-        }
-
-        const numberCount = getBoundedCount(numberCountInput.value, 7, 1, 49);
-        numberCountInput.value = String(numberCount);
-        render([generateSet(numberCount)]);
+        generate();
       });
 
-      syncModeFields();
+      decreaseNumberButton.addEventListener("click", () => {
+        updateNumberCount(-1);
+        generate();
+      });
+
+      increaseNumberButton.addEventListener("click", () => {
+        updateNumberCount(1);
+        generate();
+      });
+
+      decreaseSetButton.addEventListener("click", () => {
+        updateSetCount(-1);
+        generate();
+      });
+
+      increaseSetButton.addEventListener("click", () => {
+        updateSetCount(1);
+        generate();
+      });
+
+      numberInput.addEventListener("change", () => {
+        if (getMode() === "number") {
+          generate();
+        }
+      });
+
+      countInput.addEventListener("change", () => {
+        if (getMode() === "set") {
+          generate();
+        }
+      });
+
+      themeToggle.addEventListener("click", () => {
+        const nextTheme =
+          document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+
+        localStorage.setItem("mark-six-theme", nextTheme);
+        setTheme(nextTheme);
+      });
+
+      form.addEventListener("change", (event) => {
+        if (event.target.name === "mode") {
+          syncMode();
+          generate();
+        }
+      });
+
+      setTheme(storedTheme || preferredTheme);
+      syncMode();
+      generate();
     </script>
   </body>
 </html>
